@@ -6,7 +6,7 @@
     {
       # `nix flake init -t github:j-pap/devshells#<template>`
       #    or
-      # `nix flake new -t github:j-pap/devshells#<template> /path/to/project`
+      # `nix flake new /path/to/project -t github:j-pap/devshells#<template>`
       templates = {
         default = self.templates.minimal;
 
