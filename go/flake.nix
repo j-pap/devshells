@@ -1,12 +1,12 @@
 {
   description = "GoLang";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs =
     { self, nixpkgs, ... }:
     let
-      # Go 23 or 24
+      # Go 24
       goVersion = 24;
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;

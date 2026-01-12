@@ -1,13 +1,13 @@
 {
   description = "NodeJS";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs =
     { self, nixpkgs, ... }:
     let
-      # Node 20, 22, or 24
-      nodeVersion = 22;
+      # Node 20 or 24
+      nodeVersion = 24;
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
