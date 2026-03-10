@@ -4,10 +4,14 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs ? <nixpkgs>,
+      ...
+    }:
     let
-      # Node 20 or 24
-      nodeVersion = 24;
+      # https://search.nixos.org/packages?channel=25.11&query=nodejs_
+      nodeVer = 24; # 20, 24
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
@@ -34,8 +38,8 @@
             # Packages for the environment
             packages = builtins.attrValues {
               inherit (pkgs)
-                nodejs  # Language binary
-              ;
+                nodejs # Language binary
+                ;
             };
 
             # Environment activation commands
@@ -49,11 +53,12 @@
       overlays.default =
         final: prev:
         let
-          nodejs = final."nodejs_${toString nodeVersion}";
+          nodejs = prev."nodejs_${toString nodeVer}";
+          buildNpmPackage = prev.buildNpmPackage.override { inherit nodejs; };
         in
         {
           inherit nodejs;
-          buildNpmPackage = prev.buildNpmPackage.override { inherit nodejs; };
+          inherit buildNpmPackage;
         };
     };
 }

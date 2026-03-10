@@ -4,10 +4,14 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs ? <nixpkgs>,
+      ...
+    }:
     let
-      # Python 3.10, 3.11, 3.12, 3.14, or 3.15
-      pythonVersion = "3.12";
+      # https://search.nixos.org/packages?channel=25.11&query=python3
+      pythonVer = "3.13"; # 3.10, 3.11, 3.12, 3.13, 3.14, 3.15
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
@@ -33,23 +37,24 @@
 
             # Packages for the environment
             packages = [
-              (pkgs.python3.withPackages (
+              (pkgs.python.withPackages (
                 pykgs:
                 builtins.attrValues {
                   inherit (pykgs)
-                    black               # Formatter
-                    flake8              # Linter
-                    pip                 # Python package manager
-                    python-lsp-server   # LSP
-                    venvShellHook       # Nix shell venv hook
-                  ;
+                    black # Formatter
+                    flake8 # Linter
+                    pip # Python package manager
+                    python-lsp-server # LSP
+                    ruff # Formatter/linter/lsp
+                    venvShellHook # Nix shell venv hook
+                    ;
                 }
               ))
             ];
 
             # Environment activation commands
             shellHook = ''
-              #python --version
+              python --version
             '';
 
             # Virtual environment path
@@ -73,16 +78,16 @@
       overlays.default =
         final: prev:
         let
-          concatVer =
+          concat =
             v:
             final.lib.strings.concatStrings [
               "${final.lib.versions.major v}"
               "${final.lib.versions.minor v}"
             ];
-          python3 = final."python${concatVer pythonVersion}";
+          python = prev."python${concat pythonVer}";
         in
         {
-          inherit python3;
+          inherit python;
         };
     };
 }

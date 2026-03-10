@@ -4,10 +4,14 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs ? <nixpkgs>,
+      ...
+    }:
     let
-      # Go 24
-      goVersion = 24;
+      # https://search.nixos.org/packages?channel=25.11&query=go_1_
+      goVer = 24; # 24, 26
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
@@ -34,12 +38,12 @@
             # Packages for the environment
             packages = builtins.attrValues {
               inherit (pkgs)
-                delve     # Debugger
-                go        # Language binary
-                gopls     # LSP - requires latest Go
-                go-tools  # Linter | `staticcheck`
-                gotools   # Additional modules
-              ;
+                delve # Debugger
+                go # Language binary
+                gopls # LSP - requires latest Go
+                go-tools # Linter | `staticcheck`
+                gotools # Additional modules
+                ;
             };
 
             # Environment activation commands
@@ -53,7 +57,7 @@
       overlays.default =
         final: prev:
         let
-          go = final."go_1_${toString goVersion}";
+          go = prev."go_1_${toString goVer}";
           buildGoModule = prev.buildGoModule.override { inherit go; };
         in
         {

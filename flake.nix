@@ -1,5 +1,5 @@
 {
-  description = "Various NixOS Devshell Templates";
+  description = "NixOS Devshell Templates";
 
   outputs =
     { self, ... }:

@@ -4,7 +4,11 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs ? <nixpkgs>,
+      ...
+    }:
     let
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
@@ -36,7 +40,7 @@
                 cowsay
                 hello
                 lolcat
-              ;
+                ;
             };
 
             # Environment activation commands
