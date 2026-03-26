@@ -11,7 +11,7 @@
     }:
     let
       # https://search.nixos.org/packages?channel=25.11&query=nodejs_
-      nodeVer = 24; # 20, 24
+      nodeVer = 22; # 20, 22, 24
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
@@ -53,7 +53,7 @@
       overlays.default =
         final: prev:
         let
-          nodejs = prev."nodejs_${toString nodeVer}";
+          nodejs = final."nodejs_${toString nodeVer}";
           buildNpmPackage = prev.buildNpmPackage.override { inherit nodejs; };
         in
         {

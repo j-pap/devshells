@@ -84,7 +84,7 @@
               "${final.lib.versions.major v}"
               "${final.lib.versions.minor v}"
             ];
-          python = prev."python${concat pythonVer}";
+          python = final."python${concat pythonVer}";
         in
         {
           inherit python;

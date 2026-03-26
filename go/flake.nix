@@ -11,7 +11,7 @@
     }:
     let
       # https://search.nixos.org/packages?channel=25.11&query=go_1_
-      goVer = 24; # 24, 26
+      goVer = 25; # 24, 25, 26
 
       supportedSystems = nixpkgs.lib.systems.flakeExposed;
       forEachSystem =
@@ -54,10 +54,33 @@
         }
       );
 
+      /*
+        packages = forEachSystem (
+          { pkgs }:
+          {
+            default =
+              let
+                pname = "";
+                version = "";
+              in
+                pkgs.buildGoModule {
+                  inherit pname;
+                  inherit version;
+                  src = { };
+                  vendorHash = pkgs.lib.fakeHash;
+
+                  nativeBuildInputs = [ ];
+
+                  buildInputs = [ ];
+                };
+          }
+        );
+      */
+
       overlays.default =
         final: prev:
         let
-          go = prev."go_1_${toString goVer}";
+          go = final."go_1_${toString goVer}";
           buildGoModule = prev.buildGoModule.override { inherit go; };
         in
         {
