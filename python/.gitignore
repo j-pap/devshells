@@ -1,3 +1,7 @@
+# Nix
 .direnv
+result
+# Python
+.pyc
 .venv
-result/
+__pycache__
